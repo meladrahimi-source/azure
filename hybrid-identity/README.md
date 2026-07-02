@@ -8,55 +8,36 @@ This project introduces the concepts of Hybrid Identity and Hybrid Connectivity 
 
 # Task 1 – Hybrid Environment Overview
 
-## Hybrid Architecture Diagram
+## Hybrid Identity Architecture
 
-```text
-                    On-Premises Environment
-+------------------------------------------------------+
-| |
-| Local Network |
-| | |
-| +-------------+ |
-| | VPN Device |==============================+ |
-| +-------------+ | |
-| | |
-| +----------------------+ | |
-| | Active Directory |---------------------|------+
-| +----------------------+ Identity Sync |
-| |
-+-----------------------------------------------+
-                                                |
-                                                |
-=============================================== VPN
-                                                |
-                                                |
-                     Microsoft Azure
-+--------------------------------------------------------------+
-| |
-| Microsoft Entra ID |
-| | |
-| | |
-| +----------------+ |
-| | Azure Subscription | |
-| +----------------+ |
-| | |
-| +----------------+ |
-| | Resource Group | |
-| +----------------+ |
-| | |
-| +----------------+ |
-| | Virtual Network| |
-| +----------------+ |
-| | |
-| +----------------+ |
-| | VPN Gateway | |
-| +----------------+ |
-| | |
-| +----------------+ |
-| | Azure VM | |
-| +----------------+ |
-| |
-+--------------------------------------------------------------+
+```mermaid
+graph TB
+
+subgraph On-Premises
+LAN[Local Network]
+AD[Active Directory]
+VPN[VPN Device]
+end
+
+subgraph Microsoft Azure
+ENTRA[Microsoft Entra ID]
+SUB[Azure Subscription]
+RG[Resource Group]
+VNET[Azure Virtual Network]
+GW[VPN Gateway]
+VM[Azure VM]
+end
+
+AD -->|Identity Synchronization| ENTRA
+VPN -->|Site-to-Site VPN| GW
+
+SUB --> RG
+RG --> VNET
+VNET --> VM
+VNET --> GW
+ENTRA --> SUB
+LAN --> AD
+LAN --> VPN
 ```
 
 ### Component Roles
